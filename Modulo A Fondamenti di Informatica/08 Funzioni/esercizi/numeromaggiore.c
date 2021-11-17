@@ -4,10 +4,13 @@
 #include <stdio.h>
 
 int calcmax(int a, int b) {
+	int m;
 	if(a > b)
-		return a;
+		m = a;
 	else
-		return b;
+		m = b;
+
+	return m;
 }
 
 main() {
