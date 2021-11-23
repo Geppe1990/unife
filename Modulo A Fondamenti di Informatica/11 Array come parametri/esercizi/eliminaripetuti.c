@@ -13,7 +13,6 @@ void eliminaRipetizioni(int *a, int *size) {
 			if(i != j) {
 				if(a[i] == a[j]) {
 					a[j] = a[*size-1];
-					a[*size-1] = '\0';
 					*size = *size-1;
 				}
 			}
@@ -28,20 +27,21 @@ void getData(int *a, int size) {
 	}
 }
 
-int getSize() {
-	int val;
+void getSize(int *size) {
 	printf("Quanti valori vuoi inserire? ");
-	scanf("%d", &val);
-	return val;
+	scanf("%d", size);
 }
 
-int main() {
-	int a[10];
-	int size = getSize();
-	getData(a, size);
-	eliminaRipetizioni(a, &size);
-
+void printArray(int *a, int size) {
 	for(int i=0; i<size; i++) {
 		printf("%d\n", a[i]);
 	}
+}
+
+int main() {
+	int a[10], size;
+	getSize(&size);
+	getData(a, size);
+	eliminaRipetizioni(a, &size);
+	printArray(a, size);
 }
