@@ -1,0 +1,2 @@
+- Scaricare le slide delle esercitazioni
+- Fare le esercitazioni dalla 3 in poi
