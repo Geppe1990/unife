@@ -13,7 +13,7 @@
 
 #include <stdio.h>
 
-int disuguaglianzatriangolare(int a, int b, int c) {
+int disuguaglianza(int a, int b, int c) {
 	int result = 0;
 	
 	if(a <= b + c && b <= a + c && c <= a + b)
@@ -30,7 +30,7 @@ int main() {
 	scanf("%d", &b);
 	printf("Inserisci il lato c: ");
 	scanf("%d", &c);
-	int r = disuguaglianzatriangolare(a, b, c);
+	int r = disuguaglianza(a, b, c);
 
 	if(r)
 		printf("E' possibile costruire il triangolo\n");
