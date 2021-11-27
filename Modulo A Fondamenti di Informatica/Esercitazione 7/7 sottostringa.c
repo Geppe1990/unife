@@ -13,32 +13,26 @@
 #define DIM 100
 
 int main() {
-	char s1[DIM] = "sassofonista";
-	char s2[DIM] = "asso";
-
-	printf("Parola da cercare: %s\n", s2);
+	char s1[DIM];
+	char s2[DIM];
+	printf("Inserisci parola: ");
+	scanf("%s", s1);
+	printf("Parola da cercare: ");
+	scanf("\n%s", s2);
 	
-// s -> s1[0] ->
-// a -> s1[1] -> s2[0] -> a
-// s -> s1[2] -> s2[1] -> s
-// s -> s1[3] -> s2[2] -> s
-// o -> s1[4] -> s2[3] -> o
-// f -> s1[5] ->
-// o -> s1[6] ->
-// n -> s1[7] ->
-// i -> s1[8] ->
-// s -> s1[9] ->
-// t -> s1[10] ->
-// a -> s1[1] ->
-	int presente = 1;
+	int presente;
 	int i = 0;
 	int j = 0;
-	while(s2[i] != '\0' && presente) {
-		if(s1[j] == s2[i]){
+	while(s2[j] != '\0' && s1[i] != '\0') {
+		presente = 0;
+		if(s1[i] == s2[j]){
+			presente = 1;
 			i++;
 			j++;
 		} else {
-			j++;
+			presente = 0;
+			j=0;
+			i++;
 		}
 	}
 
