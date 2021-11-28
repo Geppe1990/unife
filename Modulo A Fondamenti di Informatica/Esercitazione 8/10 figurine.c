@@ -34,7 +34,7 @@ int main() {
 		{4,5,2,18,17},
 		{13,5,4,6,12},
 	};
-// 20, 23
+
 	for(i=0; i<Nbustine; i++) {
 		if(Nalbum < 25) {
 			bustineUsate++;
