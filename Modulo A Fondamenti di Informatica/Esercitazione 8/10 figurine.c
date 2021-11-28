@@ -15,7 +15,7 @@ typedef struct {
 } bustina;
 
 int main() {
-	const int Nbustine = 12; // 12 se usi dummy content, 11 senza
+	const int Nbustine = 11; // 12 se usi dummy content, 11 senza
 	int album[25];
 	int i,j,k;
 	int Nalbum=0;
@@ -28,7 +28,7 @@ int main() {
 		{1,3,2,4,5},
 		{2,6,5,4,8},
 		{11,13,14,15,12},
-		{4,20,5,23,2}, // DUMMY CONTENT
+		// {4,20,5,23,2}, // DUMMY CONTENT
 		{19,18,17,16,15},
 		{2,4,6,3,12},
 		{4,5,2,18,17},
