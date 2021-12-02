@@ -66,7 +66,6 @@ int ricerca(stazione stazioni[], int length, char s[20], int *ore, int *minuti) 
 	*minuti = 0;
 	for(i=0; i<length; i++) {
 		if(strcmp(stazioni[i].partenza, s) == 0) {
-			printf("%s è presente\n", s);
 			presente = i;
 			*minuti += stazioni[i].durata;
 		}
@@ -105,7 +104,6 @@ int lettura(stazione stazioni[]) {
 		minuti += stazioni[i].durata;
 		printf("%s\t", stazioni[i].arrivo);
 		printf("%d:%d\n", ora, minuti);
-		// printf("%d:%d\n", ora, minuti);
 	}
 	return length;
 }
