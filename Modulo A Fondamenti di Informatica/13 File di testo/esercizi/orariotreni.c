@@ -59,7 +59,7 @@ typedef struct {
 	int durata;
 } stazione;
 
-int ricerca(stazione stazioni[], int length, char s[20], char s2[20], int *ora, int *minuti) {
+int ricerca(stazione stazioni[], int length, char s[20], char s2[20], int *minuti) {
 	int i = 0, presente = -1;
 	*minuti = 0;
 
@@ -136,13 +136,13 @@ void elaborazione(stazione stazioni[], int length) {
 	scanf("%s", partenza);
 	int ora = 9;
 	int minuti;
-	int cercastazione = ricerca(stazioni, length, partenza, arrivo, &ora, &minuti);
+	int cercastazione = ricerca(stazioni, length, partenza, arrivo, &minuti);
 
 	if(cercastazione != -1) {
 		printf("%s - %s\n", partenza, arrivo);
 		printf("Parte alle: %d:%d\n", ora, minuti);
 	} else {
-		printf("Stazione non trovata\n");
+		printf("Nessun treno parte da %partenza\n", partenza);
 	}
 }
 

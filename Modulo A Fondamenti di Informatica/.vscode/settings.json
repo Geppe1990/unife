@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"*.ftl": "ftl",
+		"*.md": "markdown",
+		"string": "c",
+		"iosfwd": "c"
+	}
+}
