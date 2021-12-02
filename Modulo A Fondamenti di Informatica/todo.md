@@ -1,2 +1,2 @@
 - Scaricare le slide delle esercitazioni
-- Fare le esercitazioni dalla 3 in poi
+- Arrivato a lezione 13:00 minuto 30

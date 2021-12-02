@@ -1,0 +1,9 @@
+Castelmaggiore Corticella 4
+Coronella PoggioR 6
+Corticella Bologna 9
+Ferrara Coronella 6
+Funo Castelmaggiore 4
+Galliera SanPietro 6
+PoggioR Galliera 6
+SanGiorgio Funo 5
+SanPietro SanGiorgio 6
