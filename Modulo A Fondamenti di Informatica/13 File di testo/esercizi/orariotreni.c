@@ -119,6 +119,8 @@ void elaborazione(stazione stazioni[], int length) {
 	if(cercastazione != -1) {
 		printf("%s\t%s\t%d\n", stazioni[cercastazione].partenza, stazioni[cercastazione].arrivo, stazioni[cercastazione].durata);
 		printf("%d:%d\n", ore, minuti);
+	} else {
+		printf("Stazione non trovata\n");
 	}
 }
 
