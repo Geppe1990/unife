@@ -59,19 +59,28 @@ typedef struct {
 	int durata;
 } stazione;
 
-int ricerca(stazione stazioni[], int length, char s[20], int *ore, int *minuti) {
-	int i=0;
-	int presente = -1;
-	*ore = stazioni[0].durata;
+int ricerca(stazione stazioni[], int length, char s[20], char s2[20], int *ora, int *minuti) {
+	int i = 0, presente = -1;
 	*minuti = 0;
-	for(i=0; i<length; i++) {
-		if(strcmp(stazioni[i].partenza, s) == 0) {
-			presente = i;
-			*minuti += stazioni[i].durata;
-		}
 
-		if(presente == -1)
-			*minuti += stazioni[i].durata;
+	char stazione[20] = "Ferrara";
+
+	while(i<length) {
+		int trovato = 0, j = 0;
+		while(j<length && trovato == 0) {
+			if((strcmp(stazione, stazioni[j].partenza)) == 0) {
+				strcpy(stazione, stazioni[j].arrivo);
+				if(strcmp(s, stazioni[j].partenza) == 0) {
+					strcpy(s2, stazioni[j].arrivo);
+					return 0;
+				}
+				trovato = 1;
+				*minuti += stazioni[j].durata;
+
+			}
+			j++;
+		}
+		i++;
 	}
 
 	return presente;
@@ -79,7 +88,6 @@ int ricerca(stazione stazioni[], int length, char s[20], int *ore, int *minuti) 
 
 int lettura(stazione stazioni[]) {
 	int length = 0;
-	int i = 0;
 	FILE *fp;
 
 	if((fp = fopen("treni.txt", "rt")) == NULL) {
@@ -96,29 +104,43 @@ int lettura(stazione stazioni[]) {
 		exit(2);
 	}
 
-	int ora = stazioni[0].durata;
-	int minuti = 0;
-	for(i=0; i<length; i++) {
-		printf("%s\t", stazioni[i].partenza);
-		printf("%d:%d\n", ora, minuti);
-		minuti += stazioni[i].durata;
-		printf("%s\t", stazioni[i].arrivo);
-		printf("%d:%d\n", ora, minuti);
+	int ora = 9, minuti = 0;
+	int i = 0, j = 0;
+
+	char stazione[20] = "Ferrara";
+
+	while(i<length) {
+		int trovato = 0;
+		int j = 0;
+		while(j<length && trovato == 0) {
+			if((strcmp(stazione, stazioni[j].partenza)) == 0) {
+				printf("%s %d:%d\n", stazione, ora, minuti);
+				strcpy(stazione, stazioni[j].arrivo);
+				trovato = 1;
+				minuti += stazioni[j].durata;
+			}
+			j++;
+		}
+		i++;
+		if(i == length) {
+			printf("%s %d:%d\n", stazione, ora, minuti);
+		}
 	}
 	return length;
 }
 
 void elaborazione(stazione stazioni[], int length) {
 	char partenza[20];
+	char arrivo[20];
 	printf("Inserisci il nome della stazione da cercare: ");
 	scanf("%s", partenza);
-	int ore;
+	int ora = 9;
 	int minuti;
-	int cercastazione = ricerca(stazioni, length, partenza, &ore, &minuti);
+	int cercastazione = ricerca(stazioni, length, partenza, arrivo, &ora, &minuti);
 
 	if(cercastazione != -1) {
-		printf("%s\t%s\t%d\n", stazioni[cercastazione].partenza, stazioni[cercastazione].arrivo, stazioni[cercastazione].durata);
-		printf("%d:%d\n", ore, minuti);
+		printf("%s - %s\n", partenza, arrivo);
+		printf("Parte alle: %d:%d\n", ora, minuti);
 	} else {
 		printf("Stazione non trovata\n");
 	}
