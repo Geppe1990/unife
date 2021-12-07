@@ -100,8 +100,8 @@ void elabora(negozio N[], int *N_negozi, float *media, int *negozio) {
 	*media = distanza_media(N[0], N, N_negozi);
 	for(i=0; i<*N_negozi; i++) {
 		float media_negozio = distanza_media(N[i], N, N_negozi);
-		printf("Se lo posiziono a %s\n", N[i].nome);
-		printf("La distanza media è %f\n", media_negozio);
+		printf("[%s]\t\t", N[i].nome);
+		printf("%f\n", media_negozio);
 		if(media_negozio < *media) {
 			*media = media_negozio;
 			*negozio = i;
