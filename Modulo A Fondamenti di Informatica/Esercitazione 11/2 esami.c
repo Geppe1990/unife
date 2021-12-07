@@ -65,30 +65,6 @@ void readLibretto(libretto libretti[], int *N, char filename[DIMFILE]) {
 	}
 }
 
-void readRisultato(libretto risultati[], char filename[DIMFILE]) {
-	FILE *fp;
-	int i;
-	libretto prova[DIM];
-	int N_prova = 0;
-
-	if((fp = fopen(filename, "rb")) == NULL) {
-		printf("Errore nell'apertura del file\n");
-		exit(1);
-	}
-
-	N_prova = fread(prova, sizeof(libretto), DIM, fp);
-
-	// si rompe qui
-	//for(i=0; i<N_prova; i++) {
-		// printf("%s %d\n", prova[i].nome_esame, prova[i].voto);
-	//}
-
-	if(fclose(fp) != 0) {
-		printf("Errore nella chiusura del file\n");
-		exit(0);
-	}	
-}
-
 int getAmbito(ambito ambiti[], int N, char esame[DIMESAME]) {
 	int i;
 	for(i=0; i<N; i++) {
@@ -100,43 +76,10 @@ int getAmbito(ambito ambiti[], int N, char esame[DIMESAME]) {
 	return 0;
 }
 
-int main() {
-	ambito ambiti[DIM];
-	libretto libretti[DIM];
-	libretto risultati[DIM];
-	int N_ambiti;
-	int N_libretti;
-	int N_risultati = 0;
-	int i;
-	char ambito[DIMAMBITO] = "fis";
-
-	readAmbito(ambiti, &N_ambiti, "ambito.bin");
-	readLibretto(libretti, &N_libretti, "libretto.bin");
-
-	getAmbito(ambiti, N_ambiti, "fisica2");
-
-	for(i=0; i<N_libretti; i++) {
-		int index = getAmbito(ambiti, N_ambiti, libretti[i].nome_esame);
-		char ambito_esame[DIMAMBITO];
-		strcpy(ambito_esame, ambiti[index].ambito_esame);
-		
-		if((strcmp(ambito, ambito_esame)) == 0) {
-			// printf("L'ambito di %s è %s\n", libretti[i].nome_esame, ambito_esame);
-			// risultati[N_risultati] = libretti[i];
-			strcpy(risultati[N_risultati].nome_esame, libretti[i].nome_esame);
-			risultati[N_risultati].voto = libretti[i].voto;
-			N_risultati++;
-		}
-		printf("Risultati: %d\n", N_risultati);
-	}
-
-	// for(i=0; i<N_risultati; i++) {
-	// 	printf("%s: %d\n", risultati[i].nome_esame, risultati[i].voto);
-	// }
-
+void writeRisultati(libretto risultati[], char filename[DIMFILE]) {
 	FILE *fp;
 
-	if((fp = fopen("voti.bin", "wb")) == NULL) {
+	if((fp = fopen(filename, "wb")) == NULL) {
 		printf("Errore nell'apertura del file\n");
 		exit(1);
 	}
@@ -147,17 +90,61 @@ int main() {
 		printf("Errore nella chiusura del file\n");
 		exit(2);
 	}
+}
 
-	readRisultato(risultati, "voti.bin");
+void readTest(libretto test[], int *N, int DIM_RISULTATI, char filename[DIMFILE]) {
+	FILE *fp;
 
-	// una stringa inserita da tastiera dell’utente (indicante un ambito di studi), stampi su un terzo file binario solo gli esami (records del secondo file) appartenenti all’ambito specificato dall’utente.
+	if((fp = fopen(filename, "rb")) == NULL) {
+		printf("Errore nell'apertura del file\n");
+		exit(1);
+	}
 
-	// for(i=0; i<N_ambiti; i++) {
-    //     printf("Ambito: %s\tNome: %s\n", ambiti[i].ambito_esame, ambiti[i].nome_esame);
-	// }
-	// printf("\n\n");
-	// for(i=0; i<N_libretti; i++) {
-    //     printf("Nome: %s\tVoto: %d\n", libretti[i].nome_esame, libretti[i].voto);
-	// }
+	*N = fread(test, sizeof(libretto), DIM_RISULTATI, fp);
 
+	if(fclose(fp) != 0) {
+		printf("Errore nella chiusura del file\n");
+		exit(0);
+	}
+
+}
+
+void printTest(libretto elm[], int N) {
+	int i;
+	for(i=0; i<N; i++){
+		printf("Nome: %s\tVoto: %d\n", elm[i].nome_esame, elm[i].voto);
+	}
+}
+
+int main() {
+	ambito ambiti[DIM];
+	libretto libretti[DIM];
+	libretto risultati[DIM];
+	libretto test[DIM];
+	int N_ambiti;
+	int N_libretti;
+	int N_risultati = 0;
+	int N_test;
+	int i;
+	char ambito[DIMAMBITO] = "fis";
+
+	readAmbito(ambiti, &N_ambiti, "ambito.bin");
+	readLibretto(libretti, &N_libretti, "libretto.bin");
+
+	for(i=0; i<N_libretti; i++) {
+		int index = getAmbito(ambiti, N_ambiti, libretti[i].nome_esame);
+		char ambito_esame[DIMAMBITO];
+		strcpy(ambito_esame, ambiti[index].ambito_esame);
+		
+		if((strcmp(ambito, ambito_esame)) == 0) {
+			printf("L'ambito di %s è %s\n", libretti[i].nome_esame, ambito_esame);
+			risultati[N_risultati] = libretti[i];
+			N_risultati++;
+		}
+	}
+
+	writeRisultati(risultati, "voti.bin");
+	// void printReadTest(libretto test[], int *N_test, char filename[DIMFILE]) {
+	readTest(test, &N_test, N_risultati, "voti.bin");
+	printTest(test, N_test);
 }
