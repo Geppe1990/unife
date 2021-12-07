@@ -33,7 +33,6 @@ typedef struct {
 
 void readAmbito(ambito ambiti[], int *N, char filename[DIMFILE]) {
 	FILE *fp;
-	int i;
 
 	if((fp = fopen(filename, "rb")) == NULL) {
 		printf("Errore nell'apertura del file\n");
@@ -48,16 +47,15 @@ void readAmbito(ambito ambiti[], int *N, char filename[DIMFILE]) {
 	}
 }
 
-void readLibretto(libretto libretti[], int *N, char filename[DIMFILE]) {
+void readLibretto(libretto libretti[], int *N, int DIM_RISULTATI, char filename[DIMFILE]) {
 	FILE *fp;
-	int i;
 
 	if((fp = fopen(filename, "rb")) == NULL) {
 		printf("Errore nell'apertura del file\n");
 		exit(1);
 	}
 
-	*N = fread(libretti, sizeof(libretto), DIM, fp);
+	*N = fread(libretti, sizeof(libretto), DIM_RISULTATI, fp);
 
 	if(fclose(fp) != 0) {
 		printf("Errore nella chiusura del file\n");
@@ -70,13 +68,12 @@ int getAmbito(ambito ambiti[], int N, char esame[DIMESAME]) {
 	for(i=0; i<N; i++) {
 		if(strcmp(ambiti[i].nome_esame, esame) == 0) {
 			return i;
-			// printf("%s è uguale a %s, ambito %s\n", ambiti[i].nome_esame, esame, ambiti[i].ambito_esame);
 		}
 	}
 	return 0;
 }
 
-void writeRisultati(libretto risultati[], char filename[DIMFILE]) {
+void writeLibretto(libretto risultati[], char filename[DIMFILE]) {
 	FILE *fp;
 
 	if((fp = fopen(filename, "wb")) == NULL) {
@@ -92,27 +89,33 @@ void writeRisultati(libretto risultati[], char filename[DIMFILE]) {
 	}
 }
 
-void readTest(libretto test[], int *N, int DIM_RISULTATI, char filename[DIMFILE]) {
-	FILE *fp;
-
-	if((fp = fopen(filename, "rb")) == NULL) {
-		printf("Errore nell'apertura del file\n");
-		exit(1);
-	}
-
-	*N = fread(test, sizeof(libretto), DIM_RISULTATI, fp);
-
-	if(fclose(fp) != 0) {
-		printf("Errore nella chiusura del file\n");
-		exit(0);
-	}
-
-}
-
-void printTest(libretto elm[], int N) {
+void printLibretto(libretto elm[], int N) {
 	int i;
 	for(i=0; i<N; i++){
 		printf("Nome: %s\tVoto: %d\n", elm[i].nome_esame, elm[i].voto);
+	}
+}
+
+void getEsami(
+	libretto libretti[], 
+	int N_libretti,
+	ambito ambiti[],
+	int N_ambiti,
+	libretto risultati[],
+	int *N_risultati,
+	char ambito[DIMAMBITO]
+) {
+	int i;
+	for(i=0; i<N_libretti; i++) {
+		int index = getAmbito(ambiti, N_ambiti, libretti[i].nome_esame);
+		char ambito_esame[DIMAMBITO];
+		strcpy(ambito_esame, ambiti[index].ambito_esame);
+
+		if((strcmp(ambito, ambito_esame)) == 0) {
+			printf("L'ambito di %s è %s\n", libretti[i].nome_esame, ambito_esame);
+			risultati[*N_risultati] = libretti[i];
+			(*N_risultati)++;
+		}
 	}
 }
 
@@ -125,26 +128,12 @@ int main() {
 	int N_libretti;
 	int N_risultati = 0;
 	int N_test;
-	int i;
 	char ambito[DIMAMBITO] = "fis";
 
 	readAmbito(ambiti, &N_ambiti, "ambito.bin");
-	readLibretto(libretti, &N_libretti, "libretto.bin");
-
-	for(i=0; i<N_libretti; i++) {
-		int index = getAmbito(ambiti, N_ambiti, libretti[i].nome_esame);
-		char ambito_esame[DIMAMBITO];
-		strcpy(ambito_esame, ambiti[index].ambito_esame);
-		
-		if((strcmp(ambito, ambito_esame)) == 0) {
-			printf("L'ambito di %s è %s\n", libretti[i].nome_esame, ambito_esame);
-			risultati[N_risultati] = libretti[i];
-			N_risultati++;
-		}
-	}
-
-	writeRisultati(risultati, "voti.bin");
-	// void printReadTest(libretto test[], int *N_test, char filename[DIMFILE]) {
-	readTest(test, &N_test, N_risultati, "voti.bin");
-	printTest(test, N_test);
+	readLibretto(libretti, &N_libretti, DIM, "libretto.bin");
+	getEsami(libretti, N_libretti, ambiti, N_ambiti, risultati, &N_risultati, ambito);
+	writeLibretto(risultati, "voti.bin");
+	readLibretto(test, &N_test, N_risultati, "voti.bin");
+	printLibretto(test, N_test);
 }
