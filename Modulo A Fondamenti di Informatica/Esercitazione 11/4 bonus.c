@@ -154,6 +154,25 @@ int getStanza(char m[30], mansione mansioni[], int N_mansioni) {
 	return -1;
 }
 
+void findKiller(spostamenti spostamento[], int N_spostamenti, pianificazione pianificazioni[], int N_pianificazioni) {
+	int i, j;
+	for(i=0; i<N_spostamenti; i++) {
+		printf("%d: Il killer era in %s alle %d\n", i, spostamento[i].stanza, spostamento[i].fascia_oraria);
+		for(j=0; j<N_pianificazioni; j++) {
+			int s = getStanza(pianificazioni[j].mansione, mansioni, N_mansioni);
+			char stanza[20];
+			strcpy(stanza, mansioni[s].stanza);
+			
+			if(
+				spostamento[i].fascia_oraria == pianificazioni[j].fascia_oraria && 
+				(strcmp(spostamento[i].stanza, stanza) == 0)
+			) {
+				printf("%s è stato ucciso alle %d in %s\n", pianificazioni[j].incaricato, pianificazioni[j].fascia_oraria, stanza);
+			}
+		}
+	}
+}
+
 int main() {
 	pianificazione pianificazioni[DIM];
 	mansione mansioni[DIM];
@@ -176,20 +195,5 @@ int main() {
 	readSpostamenti(spostamento, &N_spostamenti);
 	//printSpostamenti(spostamento, N_spostamenti); // DEBUG -> .fascia_oraria .stanza
 
-	findKiller();
-	for(i=0; i<N_spostamenti; i++) {
-		printf("%d: Il killer era in %s alle %d\n", i, spostamento[i].stanza, spostamento[i].fascia_oraria);
-		for(j=0; j<N_pianificazioni; j++) {
-			int s = getStanza(pianificazioni[j].mansione, mansioni, N_mansioni);
-			char stanza[20];
-			strcpy(stanza, mansioni[s].stanza);
-			
-			if(
-				spostamento[i].fascia_oraria == pianificazioni[j].fascia_oraria && 
-				(strcmp(spostamento[i].stanza, stanza) == 0)
-			) {
-				printf("%s è stato ucciso alle %d in %s\n", pianificazioni[j].incaricato, pianificazioni[j].fascia_oraria, stanza);
-			}
-		}
-	}
+	findKiller(spostamento, N_spostamenti, pianificazioni, N_pianificazioni);
 }
