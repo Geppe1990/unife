@@ -154,10 +154,17 @@ int getStanza(char m[30], mansione mansioni[], int N_mansioni) {
 	return -1;
 }
 
-void findKiller(spostamenti spostamento[], int N_spostamenti, pianificazione pianificazioni[], int N_pianificazioni) {
+void findKiller(
+	spostamenti spostamento[], 
+	int N_spostamenti, 
+	pianificazione pianificazioni[], 
+	int N_pianificazioni, 
+	mansione mansioni[], 
+	int N_mansioni
+){
 	int i, j;
 	for(i=0; i<N_spostamenti; i++) {
-		printf("%d: Il killer era in %s alle %d\n", i, spostamento[i].stanza, spostamento[i].fascia_oraria, mansione mansioni[], N_mansioni);
+		printf("Il killer era in %s alle %d\n", spostamento[i].stanza, spostamento[i].fascia_oraria);
 		for(j=0; j<N_pianificazioni; j++) {
 			int s = getStanza(pianificazioni[j].mansione, mansioni, N_mansioni);
 			char stanza[20];
@@ -173,6 +180,18 @@ void findKiller(spostamenti spostamento[], int N_spostamenti, pianificazione pia
 	}
 }
 
+void debug(int d, 
+	pianificazione pianificazioni[], int N_pianificazioni,
+	mansione mansioni[], int N_mansioni,
+	spostamenti spostamento[], int N_spostamenti
+) {
+	if(d) {
+		printPianificazioni(pianificazioni, N_pianificazioni); // -> .fascia_oraria .incaricato .mansione
+		printMansioni(mansioni, N_mansioni); // -> .mansione .stanza .ripetizioni
+		printSpostamenti(spostamento, N_spostamenti); // -> .fascia_oraria .stanza
+	}
+}
+
 int main() {
 	pianificazione pianificazioni[DIM];
 	mansione mansioni[DIM];
@@ -182,18 +201,12 @@ int main() {
 	int N_mansioni = 0;
 	int N_spostamenti;
 	int N_decessi = 0;
-	int i, j, z, x;
+	int DEBUGMODE = 0;
 
 	readPianificazioni(pianificazioni, &N_pianificazioni);
 	readMansioni(mansioni, &N_mansioni);
-	// printPianificazioni(pianificazioni, N_pianificazioni); // DEBUG -> .fascia_oraria .incaricato .mansione
-	//printMansioni(mansioni, N_mansioni); // DEBUG -> .mansione .stanza .ripetizioni
-
 	mansioniNonSvolte(mansioni, N_mansioni, pianificazioni, N_pianificazioni);
-
-	/* PARTE 2 */
 	readSpostamenti(spostamento, &N_spostamenti);
-	//printSpostamenti(spostamento, N_spostamenti); // DEBUG -> .fascia_oraria .stanza
-
 	findKiller(spostamento, N_spostamenti, pianificazioni, N_pianificazioni, mansioni, N_mansioni);
+	debug(DEBUGMODE, pianificazioni, N_pianificazioni, mansioni, N_mansioni, spostamento, N_spostamenti);
 }
