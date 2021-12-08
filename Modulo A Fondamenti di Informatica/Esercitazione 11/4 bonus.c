@@ -157,7 +157,7 @@ int getStanza(char m[30], mansione mansioni[], int N_mansioni) {
 void findKiller(spostamenti spostamento[], int N_spostamenti, pianificazione pianificazioni[], int N_pianificazioni) {
 	int i, j;
 	for(i=0; i<N_spostamenti; i++) {
-		printf("%d: Il killer era in %s alle %d\n", i, spostamento[i].stanza, spostamento[i].fascia_oraria);
+		printf("%d: Il killer era in %s alle %d\n", i, spostamento[i].stanza, spostamento[i].fascia_oraria, mansione mansioni[], N_mansioni);
 		for(j=0; j<N_pianificazioni; j++) {
 			int s = getStanza(pianificazioni[j].mansione, mansioni, N_mansioni);
 			char stanza[20];
@@ -195,5 +195,5 @@ int main() {
 	readSpostamenti(spostamento, &N_spostamenti);
 	//printSpostamenti(spostamento, N_spostamenti); // DEBUG -> .fascia_oraria .stanza
 
-	findKiller(spostamento, N_spostamenti, pianificazioni, N_pianificazioni);
+	findKiller(spostamento, N_spostamenti, pianificazioni, N_pianificazioni, mansioni, N_mansioni);
 }
