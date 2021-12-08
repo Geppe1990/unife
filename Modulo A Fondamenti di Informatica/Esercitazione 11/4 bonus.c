@@ -42,6 +42,11 @@ typedef struct {
 	char stanza[20];
 } spostamenti;
 
+typedef struct {
+	char incaricato[20];
+	int fascia_oraria;
+} decesso;
+
 void readPianificazioni(pianificazione pianificazioni[], int *N) {
 	FILE *fp;
 	
@@ -66,7 +71,7 @@ void readSpostamenti(spostamenti spostamento[], int *N) {
 		exit(1);
 	}
 
-	*N = fread(spostamento, sizeof(pianificazione), DIM, fp);
+	*N = fread(spostamento, sizeof(spostamenti), DIM, fp);
 
 	if(fclose(fp) != 0) {
 		printf("Errore nella chiusura del file\n");
@@ -139,11 +144,21 @@ void mansioniNonSvolte(mansione M[], int N1, pianificazione P[], int N2) {
 	printf("\n\n");
 }
 
+int getStanza(char m[30], mansione mansioni[], int N_mansioni) {
+	int i;
+	for(i=0; i<N_mansioni; i++) {
+		if((strcmp(m, mansioni[i].mansione)) == 0) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 int main() {
 	pianificazione pianificazioni[DIM];
 	mansione mansioni[DIM];
 	spostamenti spostamento[DIM];
-	char decessi[DIM];
+	decesso decessi[DIM];
 	int N_pianificazioni;
 	int N_mansioni = 0;
 	int N_spostamenti;
@@ -152,33 +167,28 @@ int main() {
 
 	readPianificazioni(pianificazioni, &N_pianificazioni);
 	readMansioni(mansioni, &N_mansioni);
-	//printPianificazioni(pianificazioni, N_pianificazioni); // DEBUG -> .fascia_oraria .incaricato .mansione
+	// printPianificazioni(pianificazioni, N_pianificazioni); // DEBUG -> .fascia_oraria .incaricato .mansione
 	//printMansioni(mansioni, N_mansioni); // DEBUG -> .mansione .stanza .ripetizioni
 
 	mansioniNonSvolte(mansioni, N_mansioni, pianificazioni, N_pianificazioni);
 
-	/*
-		PARTE 2
-	*/
+	/* PARTE 2 */
 	readSpostamenti(spostamento, &N_spostamenti);
 	//printSpostamenti(spostamento, N_spostamenti); // DEBUG -> .fascia_oraria .stanza
 
-	for(z=0; z<N_spostamenti; z++) {
-		printf("Il killer alle %d si trova in %s\n", spostamento[z].fascia_oraria, spostamento[z].stanza);
-		for(i=0; i<N_pianificazioni; i++) {
-			for(j=0; j<N_mansioni; j++) {
-				if(
-					(pianificazioni[i].fascia_oraria == spostamento[z].fascia_oraria) &&
-					strcmp(mansioni[j].stanza, spostamento[z].stanza) == 0
-				) {
-					// CONTROLLA SE IL TIZIO è GIà MORTO
-					printf("%s è stato ucciso alle %d in %s mentre eseguiva %s\n",
-						pianificazioni[i].incaricato,
-						pianificazioni[i].fascia_oraria,
-						mansioni[j].stanza,
-						mansioni[j].mansione
-					);
-				}
+	findKiller();
+	for(i=0; i<N_spostamenti; i++) {
+		printf("%d: Il killer era in %s alle %d\n", i, spostamento[i].stanza, spostamento[i].fascia_oraria);
+		for(j=0; j<N_pianificazioni; j++) {
+			int s = getStanza(pianificazioni[j].mansione, mansioni, N_mansioni);
+			char stanza[20];
+			strcpy(stanza, mansioni[s].stanza);
+			
+			if(
+				spostamento[i].fascia_oraria == pianificazioni[j].fascia_oraria && 
+				(strcmp(spostamento[i].stanza, stanza) == 0)
+			) {
+				printf("%s è stato ucciso alle %d in %s\n", pianificazioni[j].incaricato, pianificazioni[j].fascia_oraria, stanza);
 			}
 		}
 	}
