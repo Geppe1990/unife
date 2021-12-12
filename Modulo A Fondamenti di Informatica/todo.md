@@ -1,2 +1,3 @@
 - Scaricare le slide delle esercitazioni
-- Arrivato a lezione 13:00 minuto 30
+- Stampare esercizio teoria esame 30 novembre 2007, compresa la soluzione nella cartella 
+esercizi del capitolo 15
