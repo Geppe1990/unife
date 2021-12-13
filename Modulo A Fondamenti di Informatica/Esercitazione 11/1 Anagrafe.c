@@ -31,7 +31,7 @@ void readText(FILE *fp, int *N, persona persone[]) {
 	}
 }
 
-void whiteBin(FILE *fp, int N, persona persone[]) {
+void writeBin(FILE *fp, int N, persona persone[]) {
 	if((fp = fopen("anagrafe.bin", "wb")) == NULL) {
 		printf("Errore nell'apertura del file 2\n");
 		exit(1);
@@ -108,7 +108,7 @@ int main() {
 	persona persone_copia[DIM];
 
 	readText(fp, &N, persone);
-	whiteBin(fp, N, persone);
+	writeBin(fp, N, persone);
 	readBin(fp, N, persone);
 	writeText(fp, N, persone);
 	printText(fp, persone_copia);
