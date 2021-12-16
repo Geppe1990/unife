@@ -28,7 +28,7 @@
 
   ```c
   // main.c
-  int f(int); // Dichiarazione della funzione
+  int f(int n); // Dichiarazione della funzione
   
   main() {
   	int y = f(3); // Chiamata della funzione
@@ -42,7 +42,7 @@
 - La dichiarazione di una funzione è costituita dalla sola interfaccia costituita dalla sola interfaccia, senza corpo
 
   ```c
-  int f(int);
+  int f(int n);
   ```
 
 
@@ -52,7 +52,7 @@
 - Dichiarazione
 
   ```c
-  int f(int);
+  int f(int n);
   ```
 
   - costituisce solo una specifica delle proprietà del componente
@@ -100,14 +100,6 @@
      gcc f1.o f2.o f3.o -o nomefile
      ```
 
-3. 
-
-
-
-**ARRIVATO A 39:00**
-
-
-
 
 
 **Riassunto**
@@ -117,3 +109,96 @@ gcc -c main.c f.c
 gcc main.o f.o -o prog
 ./prog 
 ```
+
+
+
+**Header File**
+
+- Contiene tutte le dichiarazioni delle funzioni
+- è necessario includerlo con #include
+- ha estensione .h
+- per convenzione ha lo stesso nome del file .c di cui fornisce le dichiarazioni
+  - es:
+    - se la funzione **f** è definita nel file **f2c.c**
+    - il corrispondente header dovrebbe chiamarsi **f2c.h**
+
+
+
+**Direttiva #include**
+
+- è una direttiva del preprocessore
+- Il preprocessore sostituisce testualmente la direttiva con il contenuto del file incluso
+- Due formati
+  - #include <libreria.h> (il sistema sa dove trovare una libreria)
+  - #include "miofile.h" (è necessario specificare dove reperirlo)
+
+
+
+**Esempio Header**
+
+- ESEMPIO 1 - FILE INTERO
+
+  ```c
+  float fahrToCelsius(float f) {
+  	return 5.0/9 * (f-32);
+  }
+  
+  main() {
+  	float c;
+  	c = fahrToCelsius(86);
+  }
+  ```
+
+- ESEMPIO 2 - FILE SEPARATI
+
+  ```c
+  // file main.c
+  
+  float fahrToCelsius(float f);
+  
+  main() {
+  	float c;
+  	c = fahrToCelsius(86);
+  }
+  ```
+
+  ```c
+  // file f2c.c
+  
+  float fahrToCelsius(float f) {
+  	return 5.0/9 * (f-32);
+  }
+  ```
+
+- ESEMPIO 3 - FILE SEPARATI + HEADER
+
+  ```c
+  // file main.c
+  #include "f2c.h"
+  
+  main() {
+  	float c;
+  	c = fahrToCelsius(86);
+  }
+  ```
+
+  ```c
+  // file f2c.c
+  
+  float fahrToCelsius(float f) {
+  	return 5.0/9 * (f-32);
+  }
+  ```
+
+  ```c
+  // file f2c.h
+  
+  float fahrToCelsius(float f);
+  ```
+
+
+
+**Progetto**
+
+- è un contenitore di file sorgente
+- elenca i file sorgente dell'applicazione
