@@ -25,7 +25,7 @@ Cliente e servitore comunicano mediante:
 
 
 ## Definizione di una funzione
-```
+```C
 long potenza(int x, int y){
 	// x e y sono parametri formali
 	int i;
@@ -38,7 +38,7 @@ long potenza(int x, int y){
 ```
 
 ## Chiamata della funzione
-```
+```C
 main() {
 	long Y;
 	Y = potenza(X, 10);
@@ -57,19 +57,19 @@ In C, l'identificatore di una funzione è il puntatore al suo codice
 
 Per avere parametri procedura o funzione, occorre specificare un parametro formale di tipo funzione come segue:
 
-```
+```C
 tipo F1(tipo2 (*F2) (list-pf-F2), rest-param-F1)
 ```
 Nel corpo di F1 potrà esserci la chiamata:
 
-```
+```C
 k=(*F2)(...) /* con parametri attuali opportuni */
 ```
 
 Le funzioni possono anche essere restituite (attraverso puntatore) come risultato di una funzione
 
 ## Esempio
-```
+```C
 #include <math.h>
 
 double sommaquadratif(
